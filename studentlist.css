@@ -1,7 +1,19 @@
 body {
     background-color: aliceblue;
 }
-
+#huffleButton, #gryffButton, #ravenclawButton, #slytherinButton{
+    background-color: #e9ba36;
+    width: 10em;
+    height: 3em;
+    padding: 1em;
+    text-align: center;
+    border-radius: 4px;
+    margin: 1em;
+}
+#huffleButton:hover, #gryffButton:hover, #ravenclawButton:hover ,#slytherinButton:hover{
+    background-color: orange;
+    border: solid 1px black;
+}
 .gryffindor {
     background-color: #ce3a0a;
     color: #fdb02e
