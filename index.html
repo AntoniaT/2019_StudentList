@@ -7,12 +7,50 @@
     <link rel="stylesheet" href="studentlist.css" type="text/css">
 </head>
 <body>
+    <div id="modal">
+        <img id="image_modal">
+        <h1 id="fullname"></h1>
+        <h2 id="lastname"></h2>
+        <p id="housename"></p>
+        <button id="closeModalBtn">Close</button>
+    </div>
+
   <h1 id="parent">Students 1991</h1>
   <h2>Filter through the students by houses</h2>
-  <button id="huffleButton">Hufflepuff</button>
-  <button id="gryffButton">Gryffindor</button>
-  <button id="ravenclawButton">Ravenclaw</button>
-  <button id="slytherinButton">Slytherin</button>
+  <button id="btnAll" data-filtername="All">All students</button>
+  <button id="huffleButton" data-filtername="Hufflepuff">Hufflepuff</button>
+  <button id="gryffButton" data-filtername="Gryffindor">Gryffindor</button>
+  <button id="ravenclawButton" data-filtername="Ravenclaw">Ravenclaw</button>
+  <button id="slytherinButton" data-filtername="Slytherin">Slytherin</button>
+  <button id="sort1" data-sortname="sortFirst">Sort by firstname</button>
+  <button id="sort2" data-sortname="sortLast">Sort by lastname</button>
+  <button id="sort3" data-sortname="sortHouse">Sort by house</button>
+
+  <table id="studentList">    
+    <thead>
+    <tr>
+      <th>Photo</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>House</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+  
+  
+  </table>
+  <template id="template">
+    <tr>
+    <td><img src="" data-field="image"></td>
+    <td><span data-field="firstname">HERE IS THE FIRST NAME</span></td>
+    <td><span data-field="lastname">HERE IS THE LAST NAME</span></td>
+    <td><span data-field="house">HERE IS THE HOUSE</span></td>
+    <td><button data-field="remove">REMOVE</button></td>
+    <td><button data-seemore = "seemore" id="" class="seeMoreBtn">See more</button></td>
+  </tr>
+  </template>
 
 
   <script src="studentlist.js"></script>

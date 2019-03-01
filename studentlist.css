@@ -1,10 +1,14 @@
 body {
     background-color: aliceblue;
+    font-family: sans-serif;
 }
-#huffleButton, #gryffButton, #ravenclawButton, #slytherinButton{
+li {
+    list-style: none;
+}
+#huffleButton, #gryffButton, #ravenclawButton, #slytherinButton, #btnAll, #sort1, #sort2, #sort3{
     background-color: #e9ba36;
     width: 10em;
-    height: 3em;
+    height: 4em;
     padding: 1em;
     text-align: center;
     border-radius: 4px;
@@ -32,4 +36,18 @@ body {
 .slytherin {
     background-color: #588c39;
     color: #c0b1c6  
+}
+#modal{
+   display: none;
+   position: absolute; 
+   margin-left: 20%;
+   margin-top: 10%;
+   padding: 10%;
+}
+
+table, th {
+    border: 1px solid black;
+  }
+tr {
+    background-color: white;
 }
