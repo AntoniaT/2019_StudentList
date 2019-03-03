@@ -8,15 +8,27 @@
 </head>
 <body>
     <div id="modal">
+        <img id="crest_modal">
         <img id="image_modal">
-        <h1 id="fullname"></h1>
-        <h2 id="lastname"></h2>
+        <h2 id="fullname"></h2>
+ <!--       <h2 id="lastname"></h2>-->
         <p id="housename"></p>
-        <button id="closeModalBtn">Close</button>
+        <p id="blood-type"></p>
+        <p id="squad-status"></p>
+        <button id="iSquad"></button>
+        <a id="closeModalBtn">X</a>
     </div>
-
+  <!-- this shows the current status of students on the page-->
+  <div id="statusBox">
+    <p id="statusTotal"></p>
+    <p id="statusHouse"></p>
+    <p id="statusExpelled"></p>
+    <p id="statusTotal"></p>
+  </div>
+<!--Append student list on the following parent:-->
   <h1 id="parent">Students 1991</h1>
-  <h2>Filter through the students by houses</h2>
+
+<!--All buttons for filtering and sorting-->
   <button id="btnAll" data-filtername="All">All students</button>
   <button id="huffleButton" data-filtername="Hufflepuff">Hufflepuff</button>
   <button id="gryffButton" data-filtername="Gryffindor">Gryffindor</button>
@@ -33,6 +45,9 @@
       <th>First Name</th>
       <th>Last Name</th>
       <th>House</th>
+      <th>Expell</th>
+      <th>Details</th>
+
     </tr>
   </thead>
   <tbody>
@@ -41,14 +56,15 @@
   
   
   </table>
+  <!--template for the student list-->
   <template id="template">
     <tr>
     <td><img src="" data-field="image"></td>
     <td><span data-field="firstname">HERE IS THE FIRST NAME</span></td>
     <td><span data-field="lastname">HERE IS THE LAST NAME</span></td>
     <td><span data-field="house">HERE IS THE HOUSE</span></td>
-    <td><button data-field="remove">REMOVE</button></td>
-    <td><button data-seemore = "seemore" id="" class="seeMoreBtn">See more</button></td>
+    <td><button data-field="remove">Expell</button></td>
+    <td><button data-seemore ="seemore" id="" class="seeMoreBtn">See more</button></td>
   </tr>
   </template>
 

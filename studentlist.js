@@ -1,22 +1,44 @@
 "use strict";
 
+// variables for the template and the json Object
 let parent = document.querySelector("#studentList tbody");
-const linkJSON = "http://petlatkea.dk/2019/hogwarts/students.json";
+const baseLinkJSON = "http://petlatkea.dk/2019/hogwarts/students.json";
+const bloodLinkJSON = "http://petlatkea.dk/2019/hogwarts/families.json";
 const ProtoStudentObject = {
   id: "-id-",
   fullname: "-proto-name-",
   firstname : "-proto-first-",
   lastname : "-proto-last-",
+  crest: "-proto-crest-",
   image : "-proto-image-",
-  house : "-proto-house-"
+  house : "-proto-house-",
+  blood: "-blood-"
 }
 const arrayOfStudents = [];
+let bloodTypes = [];
 let idCounter = 0;
 let filteredList = [];
 let currentFilter;
 let currentSort;
 let img = document.createElement("img");
+let crestImg = document.querySelector("#crest_modal");
+let inquisitSquadArray = [];
+let expelledList = [];
+let selStudent;
+let modalColor = document.querySelector("#modal");
 
+// variable for myself in the list
+const meAsStudent = {
+  id: "me",
+  fullname: "Antonia Hackenberger",
+  firstname : "Antonia",
+  lastname : "Hackenberger",
+  image : "",
+  house : "Gryffindor",
+  crest: "",
+  blood: "pure",
+  inquisitorial: false
+}
 // variables for the filter buttons
 let huffleButton = document.querySelector("#huffleButton");
 let gryffButton = document.querySelector("#gryffButton");
@@ -34,17 +56,31 @@ function init(){
   ravenclawButton.addEventListener("click", setFilter);
   slytherinButton.addEventListener("click", setFilter); 
   allButton.addEventListener("click", setFilter);
-  loadJSON();   
+  getBloodType();   
 };
 
+// push the new array of blood types to the other array
+function getBloodType(bloodType) {
+  fetch(bloodLinkJSON)
+      .then(res => res.json())
+      .then(loadBlood);
+}
+function loadBlood(names){
+  bloodTypes = names;
+  loadJSON();
+}
 function loadJSON(){
-  fetch(linkJSON)
+  fetch(baseLinkJSON)
   .then(promise => promise.json())
   .then(prepareObjects);
   };
 
 //2. prepare the object : create a new bject and take data from JSON
 function prepareObjects(jsonList){
+  // push myself into the array of students
+  meAsStudent.image = "images/" + meAsStudent.lastname.toLowerCase() + ".png";
+  arrayOfStudents.push(meAsStudent);
+
   jsonList.forEach(jsonObject =>{
     const newObject = Object.create(ProtoStudentObject);
     idCounter++
@@ -59,16 +95,36 @@ function prepareObjects(jsonList){
     newObject.lastname = jsonObject.fullname.slice(lastSpace + 1);
     newObject.house = jsonObject.house;
     newObject.image = "images/" + newObject.lastname.toLowerCase() + "_" + jsonObject.fullname.substring(0, 1).toLowerCase() + ".png";
-
+    newObject.crest = "images/" + "crest-" + jsonObject.house.toLowerCase() + ".png";
+    
+    //include the blood type according to the blood family from second json file
+    if (bloodTypes.half.includes(newObject.lastname)){
+       newObject.blood = "half";
+    }else if(bloodTypes.pure.includes(newObject.lastname)){
+      newObject.blood = "pure";
+    }else{
+      newObject.blood = "muggle";
+    }
+    
     // 4. Put those new objects in an array of students
     arrayOfStudents.push(newObject);
     filteredList = arrayOfStudents;
-    
 });
 displayList(arrayOfStudents);
-}
+showNumbers(arrayOfStudents);
 
-function displayList(listOfStudents){
+}
+// show the status of the students on the page
+function showNumbers(){
+  let statusTotal = document.querySelector("#statusTotal");
+  let statusHouse = document.querySelector("#statusHouse");
+  statusTotal.innerHTML = "Total of " + filteredList.length + " students";
+  //statusHouse.innerHTML = "Students in Hufflepuff: " + student.house; -- for later to fix
+
+  console.log(status)
+ }
+
+ function displayList(listOfStudents){
   parent.innerHTML = "";
    listOfStudents.forEach(student =>{
   //create clone
@@ -80,7 +136,7 @@ function displayList(listOfStudents){
   clone.querySelector("[data-field=lastname]").textContent = student.lastname;
   clone.querySelector("[data-field=image]").src = student.image;
   clone.querySelector("[data-field=house]").textContent = student.house;
-  // add a remove button
+  // add a remove button and make it listen to click
   clone.querySelector("[data-field=remove]").addEventListener("click", removeStudent)
   //clone.querySelector("button").dataset.name = student.firstname;
   // add a see more button and set the attribute to be the id of each student
@@ -90,30 +146,57 @@ function displayList(listOfStudents){
   parent.appendChild(clone);
 });
 }
-
+// MODAL
 // create the modal and make everything listening to "click"
 document.body.addEventListener("click", clickedFunction);
 
 function clickedFunction (event) {
   let clickedElement = event.target // the clicked element
-  console.log(clickedElement);
+//  console.log(clickedElement);
 
 if (clickedElement.getAttribute("class") === "seeMoreBtn") {
     let clickedId = clickedElement.getAttribute("id");
-    console.log(clickedId);
+//    console.log(clickedId);
 
-    //for each loop
+//for each loop and create a modal with all the data from json
     filteredList.forEach(function (student) {
     if (student.id == clickedId) {
-    console.log(student)
     document.querySelector("#modal").style.display = "block";
-    // document.querySelector("image").innerHTML = student.image;
     document.querySelector("#image_modal").src = student.image;
-    document.querySelector("h1").innerHTML = "Name: " + student.fullname;
-    document.querySelector("p").innerHTML = "House: " + student.house;
-    // img.src = "image.png";
-    // var src = document.getElementById("x");
-    // src.appendChild(img);
+    crestImg.src = student.crest;
+    document.querySelector("#fullname").innerHTML = "Name: " + student.fullname;
+    document.querySelector("#housename").innerHTML = "House: " + student.house;
+    document.querySelector("#blood-type").innerHTML = "Blood: " + student.blood;
+    selStudent = student; // the student will update the selected Student for later use
+
+    // change the button for inqusitorial squad
+    if(selStudent.inSquad){
+      document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: member";
+      document.querySelector("#iSquad").innerHTML = "Remove from Squad";
+    }else{
+      document.querySelector("#iSquad").innerHTML = "Add to Inquisitorial Squad";
+      document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: not a member";
+
+    }
+   // change the background color of the modal according to the house
+    if (student.house === "Hufflepuff") {
+      let modalColor = document.querySelector("#modal");
+      modalColor.removeAttribute("class");
+      modalColor.classList.add("hufflepuf");
+  }else if(student.house === "Gryffindor"){
+      let modalColor = document.querySelector("#modal");
+      modalColor.removeAttribute("class");
+      modalColor.classList.add("gryffindor");
+  }else if (student.house === "Ravenclaw"){
+     let modalColor = document.querySelector("#modal");
+     modalColor.removeAttribute("class");
+      modalColor.classList.add("ravenclaw");
+  }else if (student.house === "Slytherin"){
+      let modalColor = document.querySelector("#modal");
+      modalColor.removeAttribute("class");
+      modalColor.classList.add("slytherin");
+  }
+
     }
   })
   }
@@ -121,13 +204,11 @@ if (clickedElement.getAttribute("class") === "seeMoreBtn") {
 
 document.querySelector("#closeModalBtn").addEventListener("click", function () {
   document.querySelector("#modal").style.display = "none";
- // document.querySelector("#modal").style.backgroundColor = student.id.style.backgroundColor;
 })
 
 // setting the filter 
 function setFilter(){
   currentFilter = this.dataset.filtername;
-  console.log(currentFilter);
   filterList();
 }  
 // generic filter by house function
@@ -141,12 +222,12 @@ function setFilter(){
       function filterType(student){
         return student.house === currentFilter;
     } 
-    console.log("Filtering")
-    displayList(arrayOfStudents.filter(filterType));//the filter function returns only the students from the desired house by looping through all of them and performing a check(the filterType function)
+//    console.log("Filtering")
+    displayList(arrayOfStudents.filter(filterType));
     filteredList = arrayOfStudents.filter(filterType);
     }}
     
-// sorting
+// SORTING
 document.querySelector("#sort1").addEventListener("click", sortByFirstname);
 document.querySelector("#sort2").addEventListener("click", sortByLastName);
 document.querySelector("#sort3").addEventListener("click", sortByHouse);
@@ -194,10 +275,48 @@ displayList(filteredList);
 function removeStudent(event){
   console.log("Clicked remove");
   let obj = arrayOfStudents.find(obj => obj.id === event.target.dataset.id);
+  if (obj.id === "me"){
+    alert("YOU CANNOT EXPELL THE MAGICAL STUDENT!");
+    displayList(arrayOfStudents);
+  }else{
+  // the pos is the position of the element that should be removed
   let pos = arrayOfStudents.indexOf(obj);
-  console.log(pos);
+  //let expStudent = arrayOfStudents.splice(pos, 1);
   arrayOfStudents.splice(pos, 1);
-  displayList(arrayOfStudents)
-  console.log(arrayOfStudents);
+  let expStudentList = [];
+  // push the object to the expelled student list -- not working yet
+ // expStudentList.push(obj);
+  //console.log(expStudentList);
+  }
+  filterList(arrayOfStudents);
+  }
+// show status of expelled students
+/* 
+function showStatus(){
+  I could set a counter on click of the remove button and set the counter to ++, show the count on the site
+} */
+document.querySelector("#iSquad").addEventListener("click", () => inquiSquad());
 
+function inquiSquad(){
+  if(selStudent.inSquad){ 
+    return removeFromSquad(); // return will stop the function and go to removeFromSquad function
+  }
+
+  console.log(selStudent);
+  if(selStudent.blood === "pure" || selStudent.house === "Slytherin"){
+    selStudent.inSquad = true;
+    inquisitSquadArray.push(selStudent);
+    modalColor.style.display = "none";
+
+    console.log(inquisitSquadArray);
+  }else{
+    alert("You cannot appoint this student to the Inqusitorial Squad!");
+  }
+}
+
+function removeFromSquad(){
+ console.log("already in squad")    
+ document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: not a member";
+ document.querySelector("#iSquad").innerHTML = "Add to Inquisitorial Squad";
+ inquisitSquadArray.filter(obj => obj.id === selStudent.id);
 }
