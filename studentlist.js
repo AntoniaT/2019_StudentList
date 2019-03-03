@@ -147,7 +147,7 @@ document.body.addEventListener("click", clickedFunction);
 function clickedFunction (event) {
 let clickedElement = event.target
 
-if (clickedElement.getAttribute("class") === "seeMoreBtn") {
+if (clickedElement.getAttribute("data-field") === "seemore") {
     let clickedId = clickedElement.getAttribute("id");
 
 //for each loop and create a modal with all the data from json
