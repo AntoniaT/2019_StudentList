@@ -14,6 +14,7 @@ const ProtoStudentObject = {
   house : "-proto-house-",
   blood: "-blood-"
 }
+// variables for several lists/arrays 
 const arrayOfStudents = [];
 let bloodTypes = [];
 let idCounter = 0;
@@ -26,6 +27,7 @@ let inquisitSquadArray = [];
 let expelledList = [];
 let selStudent;
 let modalColor = document.querySelector("#modal");
+let cursed = new Image();
 
 // variable for myself in the list
 const meAsStudent = {
@@ -48,7 +50,7 @@ let allButton = document.querySelector("#btnAll");
 
 window.addEventListener("DOMContentLoaded", init);
 
-//1. init script and load data from the JSON file 
+// init script and load data from the JSON file 
 function init(){
   console.log("Ready!");
   huffleButton.addEventListener("click", setFilter);
@@ -75,7 +77,7 @@ function loadJSON(){
   .then(prepareObjects);
   };
 
-//2. prepare the object : create a new bject and take data from JSON
+// prepare the object : create a new object and take data from JSON
 function prepareObjects(jsonList){
   // push myself into the array of students
   meAsStudent.image = "images/" + meAsStudent.lastname.toLowerCase() + ".png";
@@ -84,8 +86,6 @@ function prepareObjects(jsonList){
   jsonList.forEach(jsonObject =>{
     const newObject = Object.create(ProtoStudentObject);
     idCounter++
-
-    //newObject.fromJSON(jsonObject);
     const firstSpace = jsonObject.fullname.indexOf(" ");
     const lastSpace = jsonObject.fullname.lastIndexOf(" ");
     
@@ -106,12 +106,12 @@ function prepareObjects(jsonList){
       newObject.blood = "muggle";
     }
     
-    // 4. Put those new objects in an array of students
+    // Put those new objects in an array of students
     arrayOfStudents.push(newObject);
     filteredList = arrayOfStudents;
 });
 displayList(arrayOfStudents);
-showNumbers(arrayOfStudents);
+showNumbers(arrayOfStudents); // not finished - to show the status of the lists
 
 }
 // show the status of the students on the page
@@ -119,28 +119,22 @@ function showNumbers(){
   let statusTotal = document.querySelector("#statusTotal");
   let statusHouse = document.querySelector("#statusHouse");
   statusTotal.innerHTML = "Total of " + filteredList.length + " students";
-  //statusHouse.innerHTML = "Students in Hufflepuff: " + student.house; -- for later to fix
-
-  console.log(status)
  }
-
+// create the clones and display the list of students
  function displayList(listOfStudents){
   parent.innerHTML = "";
    listOfStudents.forEach(student =>{
-  //create clone
   const clone = document.querySelector("#template").content.cloneNode(true);
   // give the remove button an id
   clone.querySelector("[data-field=remove]").dataset.id = student.id;
-  // set clone data
   clone.querySelector("[data-field=firstname]").textContent = student.firstname;
   clone.querySelector("[data-field=lastname]").textContent = student.lastname;
   clone.querySelector("[data-field=image]").src = student.image;
   clone.querySelector("[data-field=house]").textContent = student.house;
   // add a remove button and make it listen to click
   clone.querySelector("[data-field=remove]").addEventListener("click", removeStudent)
-  //clone.querySelector("button").dataset.name = student.firstname;
   // add a see more button and set the attribute to be the id of each student
-  clone.querySelector(".seeMoreBtn").setAttribute("id", student.id);
+  clone.querySelector("[data-field=seemore]").setAttribute("id", student.id);
 
   //append it
   parent.appendChild(clone);
@@ -151,12 +145,10 @@ function showNumbers(){
 document.body.addEventListener("click", clickedFunction);
 
 function clickedFunction (event) {
-  let clickedElement = event.target // the clicked element
-//  console.log(clickedElement);
+let clickedElement = event.target
 
 if (clickedElement.getAttribute("class") === "seeMoreBtn") {
     let clickedId = clickedElement.getAttribute("id");
-//    console.log(clickedId);
 
 //for each loop and create a modal with all the data from json
     filteredList.forEach(function (student) {
@@ -164,18 +156,18 @@ if (clickedElement.getAttribute("class") === "seeMoreBtn") {
     document.querySelector("#modal").style.display = "block";
     document.querySelector("#image_modal").src = student.image;
     crestImg.src = student.crest;
-    document.querySelector("#fullname").innerHTML = "Name: " + student.fullname;
-    document.querySelector("#housename").innerHTML = "House: " + student.house;
-    document.querySelector("#blood-type").innerHTML = "Blood: " + student.blood;
+    document.querySelector("#fullname").innerHTML = "<span class='bolder'>Name: </span>" + student.fullname;
+    document.querySelector("#housename").innerHTML = "<span class='bolder'>House: </span>" + student.house;
+    document.querySelector("#blood-type").innerHTML = "<span class='bolder'>Blood: </span>" + student.blood;
     selStudent = student; // the student will update the selected Student for later use
 
     // change the button for inqusitorial squad
     if(selStudent.inSquad){
-      document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: member";
+      document.querySelector("#squad-status").innerHTML = "<span class='bolder'>Inquisitorial Squad: </span>" + "member";
       document.querySelector("#iSquad").innerHTML = "Remove from Squad";
     }else{
       document.querySelector("#iSquad").innerHTML = "Add to Inquisitorial Squad";
-      document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: not a member";
+      document.querySelector("#squad-status").innerHTML = "<span class='bolder'>Inquisitorial Squad: </span>" + "not a member";
 
     }
    // change the background color of the modal according to the house
@@ -206,7 +198,7 @@ document.querySelector("#closeModalBtn").addEventListener("click", function () {
   document.querySelector("#modal").style.display = "none";
 })
 
-// setting the filter 
+// setting the filter
 function setFilter(){
   currentFilter = this.dataset.filtername;
   filterList();
@@ -222,7 +214,6 @@ function setFilter(){
       function filterType(student){
         return student.house === currentFilter;
     } 
-//    console.log("Filtering")
     displayList(arrayOfStudents.filter(filterType));
     filteredList = arrayOfStudents.filter(filterType);
     }}
@@ -273,10 +264,16 @@ displayList(filteredList);
 
 // remove Student 
 function removeStudent(event){
-  console.log("Clicked remove");
+
   let obj = arrayOfStudents.find(obj => obj.id === event.target.dataset.id);
+  // special things happening when user tries to expell me from the list -- has to reload site
   if (obj.id === "me"){
-    alert("YOU CANNOT EXPELL THE MAGICAL STUDENT!");
+    cursed.src = "images/wickedguy.jpeg";
+    cursed.classList.add("cursed");
+    document.querySelector("#cursedParent").appendChild(cursed)
+    let audio = new Audio("sounds/wickedlaugh.mp3");
+    audio.play();
+    alert("YOU CANNOT EXPELL THE MAGICAL STUDENT! Now your life will cursed!");
     displayList(arrayOfStudents);
   }else{
   // the pos is the position of the element that should be removed
@@ -295,6 +292,7 @@ function removeStudent(event){
 function showStatus(){
   I could set a counter on click of the remove button and set the counter to ++, show the count on the site
 } */
+// Inquisitorial Squad 
 document.querySelector("#iSquad").addEventListener("click", () => inquiSquad());
 
 function inquiSquad(){
@@ -310,13 +308,14 @@ function inquiSquad(){
 
     console.log(inquisitSquadArray);
   }else{
-    alert("You cannot appoint this student to the Inqusitorial Squad!");
+    alert("You cannot appoint this student to the Inquisitorial Squad!");
   }
 }
 
 function removeFromSquad(){
  console.log("already in squad")    
- document.querySelector("#squad-status").innerHTML = "Inquisitorial Squad: not a member";
+ document.querySelector("#squad-status").innerHTML = "<span class='bolder'>Inquisitorial Squad: </span>" + "not a member";;
  document.querySelector("#iSquad").innerHTML = "Add to Inquisitorial Squad";
+ selStudent = "";
  inquisitSquadArray.filter(obj => obj.id === selStudent.id);
 }

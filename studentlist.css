@@ -1,19 +1,36 @@
-@import url('https://fonts.googleapis.com/css?family=Satisfy');
-@import url('https://fonts.googleapis.com/css?family=UnifrakturMaguntia');
+@import url('https://fonts.googleapis.com/css?family=Eater');
 
+/* 
+colors I used other than the given colors:
+
+yellow: #FFDE63
+light grey: #ddd
+lighter blue: #0074a9
+normal blue: #03396C
+night blue: #15132b
+
+*/
 body {
-    background-color: aliceblue;
     font-family: sans-serif;
     background-image: url("images/Hogwarts-castle.jpg");
     background-attachment: fixed;
     background-position: center;
     scroll-behavior: smooth;
 }
+.cursed{
+    position: fixed; 
+    z-index: 1000;
+    width: 100vw;
+    height: 130vh;
+
+}
 h1{
-    color:#FFDE63;
+    color: #15132b;
     text-align: center;
-    font-family: 'UnifrakturMaguntia', cursive;
+    font-family: 'Eater', cursive;
     font-size: 3em;
+    text-shadow: 2px 2px 5px #FFDE63;
+
 }
 li {
     list-style: none;
@@ -29,14 +46,20 @@ li {
     font-size: 0.8em;
     font-weight: bolder;
 }
-#huffleButton:hover, #gryffButton:hover, #ravenclawButton:hover ,#slytherinButton:hover, #btnAll:hover, #sort1:hover, #sort2:hover, #sort3:hover{
+#huffleButton:hover, #gryffButton:hover, #ravenclawButton:hover ,#slytherinButton:hover, #btnAll:hover, #sort1:hover, #sort2:hover, #sort3:hover, .cloneButtons:hover{
     background-color: orange;
     border: solid 1px black;
 }
-
+.cloneButtons{
+    background-color: #FFDE63;
+    font-size: 0.8em;
+}
 #crest_modal{
     width: 100px;
     height: auto;
+}
+.bolder{
+    font-weight: bold;
 }
 .gryffindor {
     background-color: #ce3a0a;
@@ -88,6 +111,8 @@ li {
     text-align: left;
     background-color: #FFDE63;
     color: black;  
+    font-family: 'Eater', cursive;
+
 }
 #studentList tr:nth-child(even){background-color: #03396C;}
 #studentList tr:nth-child(odd){background-color: #15132b;

@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="studentlist.css" type="text/css">
 </head>
 <body>
+   <div id="cursedParent"></div>
+  <!-- this shows the modal of each students-->  
     <div id="modal">
         <img id="crest_modal">
         <img id="image_modal">
         <h2 id="fullname"></h2>
- <!--       <h2 id="lastname"></h2>-->
         <p id="housename"></p>
         <p id="blood-type"></p>
         <p id="squad-status"></p>
@@ -26,7 +27,7 @@
     <p id="statusTotal"></p>
   </div>
 <!--Append student list on the following parent:-->
-  <h1 id="parent">Students 1991</h1>
+  <h1 id="parent">Hogwarts students of 1991</h1>
 
 <!--All buttons for filtering and sorting-->
   <button id="btnAll" data-filtername="All">All students</button>
@@ -63,8 +64,8 @@
     <td><span data-field="firstname">HERE IS THE FIRST NAME</span></td>
     <td><span data-field="lastname">HERE IS THE LAST NAME</span></td>
     <td><span data-field="house">HERE IS THE HOUSE</span></td>
-    <td><button data-field="remove">Expell</button></td>
-    <td><button data-seemore ="seemore" id="" class="seeMoreBtn">See more</button></td>
+    <td><button class="cloneButtons" data-field="remove">Expell</button></td>
+    <td><button class="cloneButtons" data-field ="seemore" id="" class="seeMoreBtn">See more</button></td>
   </tr>
   </template>
 
