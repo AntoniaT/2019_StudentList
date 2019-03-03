@@ -2,8 +2,8 @@
 
 // variables for the template and the json Object
 let parent = document.querySelector("#studentList tbody");
-const baseLinkJSON = "http://petlatkea.dk/2019/hogwarts/students.json";
-const bloodLinkJSON = "http://petlatkea.dk/2019/hogwarts/families.json";
+const baseLinkJSON = "https://petlatkea.dk/2019/hogwarts/students.json";
+const bloodLinkJSON = "https://petlatkea.dk/2019/hogwarts/families.json";
 const ProtoStudentObject = {
   id: "-id-",
   fullname: "-proto-name-",
